@@ -1,17 +1,18 @@
 import pygame
+from objects import *
 
 #initializing pygame essential modules
 pygame.init()
 
 #global variables
-screensize = 720, 480
+screensize = 800, 600
 colors = {
     'white' : (255,255,255),
     'black' : (0,0,0),
     'red'  : (255,0,0),
     'blue' : (0,0,255),
     'green': (0,255,0),
-    'yellow': (0,255,255)
+    'cyan': (0,255,255)
 }
 
 clock = pygame.time.Clock()
@@ -26,18 +27,21 @@ cheats = {
     'cr': 'red',
     'cb': 'blue',
     'cg': 'green',
-    'cy': 'yellow',
+    'cc': 'cyan',
     'ckb': 'black',
     'cw': 'white'
 }
 cheat = ''
 color = 'red'
 
+g = Grid(screensize, (5,5))
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            quit()
+            exit()
         if event.type == pygame.KEYDOWN:
             key = event.key
             if key == pygame.K_SPACE:
@@ -58,7 +62,7 @@ while True:
     if pygame.mouse.get_pressed() == (1,0,0):
         pos = pygame.mouse.get_pos()
         if draw:
-            pygame.draw.rect(screen, colors.get(color), (pos[0], pos[1], 7, 7))
+            g.draw(screen, color, pos)
         else:
             pygame.draw.circle(screen, colors.get('white'), pos, 30)
 

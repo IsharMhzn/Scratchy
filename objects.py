@@ -38,3 +38,27 @@ class Grid:
         cell = pos[0]//self.cell_size[0], pos[1]//self.cell_size[1] 
         print(cell)
         self.grid[cell[0]][cell[1]].draw(screen, color)
+
+class Pencil:
+    color = 'white'
+    def __init__(self, x=0, y=0, size=2):
+        self.pos = x, y
+        self.size = size
+    
+    def set_pos(self, x, y):
+        self.pos = x, y
+    
+    def get_pos(self):
+        return self.pos
+    
+    def increasesize(self):
+        if self.size < 15:
+            self.size += 1
+    
+    def decreasesize(self):
+        if self.size > 2:
+            self.size -= 1
+
+    def draw(self, surface, color, pos):
+        self.set_pos(*pos)
+        pygame.draw.circle(surface, colors.get(color), self.pos, self.size)  

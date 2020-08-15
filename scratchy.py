@@ -6,13 +6,20 @@ pygame.init()
 
 #global variables
 screensize = 800, 600
-colors = {
-    'white' : (255,255,255),
-    'black' : (0,0,0),
-    'red'  : (255,0,0),
-    'blue' : (0,0,255),
-    'green': (0,255,0),
-    'cyan': (0,255,255)
+cheat = ''
+color = 'red' #default color is red (at the start of program)
+draw = True
+pencil = Pencil()
+pixel = Grid(screensize, (4,4))
+cheats = {
+    'cr': 'red',
+    'cb': 'blue',
+    'cg': 'green',
+    'cc': 'cyan',
+    'ckb': 'black',
+    'cw': 'white',
+    'mpi': pixel,
+    'mdp': pencil,
 }
 
 clock = pygame.time.Clock()
@@ -22,47 +29,56 @@ screen = pygame.display.set_mode(screensize)
 pygame.display.set_caption('Scratchy')
 screen.fill(colors.get('white'))
 
-draw = True
-cheats = {
-    'cr': 'red',
-    'cb': 'blue',
-    'cg': 'green',
-    'cc': 'cyan',
-    'ckb': 'black',
-    'cw': 'white'
-}
-cheat = ''
-color = 'red'
+#active mode is pencil mode
+active = pencil
 
-g = Grid(screensize, (5,5))
-
+def cheat_detector(c):
+    #declared globally to change the value thoughout the program
+    global cheat, color, active
+    if c in cheats.keys():
+        if cheat.startswith('c'):
+            color = cheats.get(c)
+            print(f'Changed the color to {cheats[c]}.')
+        elif cheat.startswith('m'):
+            active = cheats.get(c)
+            print(f'Changed mode to {c}.')
+        else:
+            cheat = ''
+        cheat = ''
 
 while True:
+    #all the events (i.e inputs: key or mouse) while running the program
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
         if event.type == pygame.KEYDOWN:
             key = event.key
-            if key == pygame.K_SPACE:
-                draw = not draw
-            elif key == pygame.K_ESCAPE:
-                cheat = ''
-                print('Cheat cleared.')
-            else:
-                cheat += chr(key)
+            try:
+                if key == pygame.K_SPACE:
+                    draw = not draw
+                elif key == pygame.K_ESCAPE:
+                    cheat = ''
+                    print('Cheat cleared.')
+                elif key == pygame.K_KP_PLUS:
+                    active.increasesize()
+                elif key == pygame.K_KP_MINUS:
+                    active.decreasesize()
+                else:
+                    cheat += chr(key)
+            except AttributeError:
+                print('This is not allowed in current mode.')
             print(f'Cheat: "{cheat}"')
 
-    if cheat in cheats.keys():
-        color = cheats[cheat]
-        print(f'Changed the color to {cheats[cheat]}.')
-        cheat = ''
+    #reacts if a certain cheat is entered
+    #cheatlist is declared globally to avoid memory redundancy
+    cheat_detector(cheat)
 
-
+    #if a mouse left click is pressed
     if pygame.mouse.get_pressed() == (1,0,0):
         pos = pygame.mouse.get_pos()
         if draw:
-            g.draw(screen, color, pos)
+            active.draw(screen, color, pos)
         else:
             pygame.draw.circle(screen, colors.get('white'), pos, 30)
 

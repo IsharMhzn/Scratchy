@@ -18,5 +18,12 @@ For the time being, a cheat system is utilized. TO change the color or the mode,
     * 'mpi' = 'change to pixel mode'
     * 'mdp' = 'change to free drawing pencil mode'
 
+### Incomplete
+Buttons are unclickable
+
+###Todo
+> Make the button clickable
+> Implement cheat system more interactive and user friendly
+
 ## Demo
 ![Demo](demo.png)

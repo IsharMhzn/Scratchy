@@ -9,6 +9,13 @@ colors = {
     'cyan': (0,255,255)
 }
 
+colorset = [(255,204,204), (255,153,153), (255,102,102), (255,51,51), (255,0,0), 
+            (255,255,204), (255,255,153), (255,255,102), (255,255,51), (255,255,0), 
+            (204,255,204), (153,255,153), (102,255,102), (51,255,51), (0,255,0), 
+            (204,204,255), (153,153,255), (102,102,255), (51,51,255), (0,0,255), 
+            (255,255,255), (192,192,192), (128,128,128), (64,64,64), (0,0,0), 
+        ]
+
 class Cell:
     color = 'white'
     def __init__(self, x, y, l=10, b=10):
@@ -61,4 +68,40 @@ class Pencil:
 
     def draw(self, surface, color, pos):
         self.set_pos(*pos)
-        pygame.draw.circle(surface, colors.get(color), self.pos, self.size)  
+        pygame.draw.circle(surface, colors.get(color), self.pos, self.size)
+
+class Button:
+    def __init__(self, pos, size, color):
+        self.pos = pos
+        self.size = size
+        self.color = color  
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, (*self.pos, *self.size))
+
+
+class Color(Button):
+    def __init__(self, pos, color):
+        super().__init__(pos, (20, 20),color)
+        
+
+class ColorPanel:
+    group = []
+    def __init__(self, pos):
+        self.pos = pos
+        count = 0
+        for color in colorset:
+            if count % 5 == 0 and count > 0:
+                pos = self.pos[0]*0+10, pos[1] - 22
+                count = 0
+            else:
+                pos = self.pos[0]*count+10, pos[1]
+            count += 1
+            print(pos, count)
+            self.group.append(Color(pos, color))
+
+    
+    def draw(self, surface):
+        pygame.draw.rect(surface, (195,195,195), (self.pos[0]-25, self.pos[1]-95, 126, 120))
+        for c in self.group:
+            c.draw(surface)

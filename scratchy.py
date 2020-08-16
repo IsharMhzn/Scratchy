@@ -5,11 +5,12 @@ from objects import *
 pygame.init()
 
 #global variables
-screensize = 800, 600
+screensize = 1200, 720
 cheat = ''
 color = 'red' #default color is red (at the start of program)
 draw = True
 pencil = Pencil()
+
 pixel = Grid(screensize, (4,4))
 cheats = {
     'cr': 'red',
@@ -28,6 +29,8 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode(screensize)
 pygame.display.set_caption('Scratchy')
 screen.fill(colors.get('white'))
+colorpanel = ColorPanel((20,690))
+
 
 #active mode is pencil mode
 active = pencil
@@ -74,13 +77,15 @@ while True:
     #cheatlist is declared globally to avoid memory redundancy
     cheat_detector(cheat)
 
+    colorpanel.draw(screen)
     #if a mouse left click is pressed
     if pygame.mouse.get_pressed() == (1,0,0):
         pos = pygame.mouse.get_pos()
-        if draw:
-            active.draw(screen, color, pos)
-        else:
-            pygame.draw.circle(screen, colors.get('white'), pos, 30)
+        if not (pos[1] > 595 and pos[0] < 120):
+            if draw:
+                active.draw(screen, color, pos)
+            else:
+                pygame.draw.circle(screen, colors.get('white'), pos, 30)
 
     #updating the main Surface
     pygame.display.flip()

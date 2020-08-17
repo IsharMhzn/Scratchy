@@ -29,7 +29,7 @@ class Cell:
     
     def draw(self, surface, color):
         self.color = color
-        pygame.draw.rect(surface, colors[color], (self.x*self.l, self.y*self.b, self.l, self.b))
+        pygame.draw.rect(surface, color, (self.x*self.l, self.y*self.b, self.l, self.b))
 
 
 class Grid:
@@ -43,7 +43,6 @@ class Grid:
     
     def draw(self,screen, color, pos):
         cell = pos[0]//self.cell_size[0], pos[1]//self.cell_size[1] 
-        print(cell)
         self.grid[cell[0]][cell[1]].draw(screen, color)
 
 class Pencil:
@@ -68,16 +67,27 @@ class Pencil:
 
     def draw(self, surface, color, pos):
         self.set_pos(*pos)
-        pygame.draw.circle(surface, colors.get(color), self.pos, self.size)
+        pygame.draw.circle(surface, color, self.pos, self.size)
 
 class Button:
-    def __init__(self, pos, size, color):
+    def __init__(self, pos, size, color=(195,195,195), image=None, text=None):
         self.pos = pos
         self.size = size
-        self.color = color  
+        self.color = color
+        self.image = image  
+        self.text = text
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, (*self.pos, *self.size))
+        if self.image:
+            surface.blit(self.image, self.pos)
+        if self.text:
+            surface.blit(self.text, self.pos)
+    
+    def isclicked(self, pos):
+        if abs(pos[0] - self.pos[0]) <= self.size[0]  and abs(pos[1] - self.pos[1]) <= self.size[1] and pos[1] > self.pos[1] and pos[0] > self.pos[0]:
+            return True
+        return False
 
 
 class Color(Button):
@@ -97,7 +107,6 @@ class ColorPanel:
             else:
                 pos = self.pos[0]*count+10, pos[1]
             count += 1
-            print(pos, count)
             self.group.append(Color(pos, color))
 
     
@@ -105,3 +114,11 @@ class ColorPanel:
         pygame.draw.rect(surface, (195,195,195), (self.pos[0]-25, self.pos[1]-95, 126, 120))
         for c in self.group:
             c.draw(surface)
+    
+    def changecolor(self, pos):
+        for c in self.group[::-1]:
+            if abs(pos[0] - c.pos[0]) <= 20  and abs(pos[1] - c.pos[1]) <= 20 and pos[1] > c.pos[1] and pos[0] > c.pos[0]:
+                print(pos, c.pos, c.color)
+                print(f'Color changed to {c.color}')
+                return c.color
+        return (0,0,0)

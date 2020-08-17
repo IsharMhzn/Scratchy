@@ -8,7 +8,7 @@ There are two modes:
 2. Pixel mode
 > A grid system is activated consisting of cells. So when once clicks at a certain position, the cell covering that position will be filled.
 
-### Cheat system
+### RIP Cheat system (Aug 5 - Aug 8)
 For the time being, a cheat system is utilized. TO change the color or the mode, a cheat should be entered.\
     * 'cr' = 'change color to red'\
     * 'cb' = 'change color to blue'\
@@ -18,12 +18,7 @@ For the time being, a cheat system is utilized. TO change the color or the mode,
     * 'mpi' = 'change to pixel mode'\
     * 'mdp' = 'change to free drawing pencil mode'
 
-### Incomplete
-Buttons are unclickable
-
-###Todo
-> Make the button clickable
-> Implement cheat system more interactive and user friendly
 
 ## Demo
-![Demo](demo.png)
+![Demo](images/demo.png)
+![Buttons](images/demo2.png)

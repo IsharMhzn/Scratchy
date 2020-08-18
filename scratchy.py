@@ -9,14 +9,14 @@ pygame.init()
 screensize = 1200, 720
 color = (255,0,0) #default color is red (at the start of program)
 draw = True
-pencil = Pencil()
+brush = Brush()
 
 pixel = Grid(screensize, (4,4))
 
 clock = pygame.time.Clock()
 font = pygame.font.SysFont('times new roman', 15)
-brush = Button((130, 690), (20,20), image=pygame.transform.scale(pygame.image.load(os.path.join('icons', 'brush.png')), (20,20)))
-pixelbutton = Button((130,630), (65,20), text=font.render('Pixel mode', False, (0,0,0))) 
+brushbutton = Button((130, 690), (20,20), image=pygame.transform.scale(pygame.image.load(os.path.join('icons', 'brush.png')), (20,20)))
+pixelbutton = Button((130,660), (65,20), text=font.render('Pixel mode', False, (0,0,0))) 
 
 #making main window
 screen = pygame.display.set_mode(screensize)
@@ -26,7 +26,7 @@ colorpanel = ColorPanel((20,690))
 
 
 #active mode is pencil mode
-active = pencil
+active = brush
 
 while True:
     #all the events (i.e inputs: key or mouse) while running the program
@@ -48,11 +48,13 @@ while True:
                 print('This is not allowed in current mode.')
 
     colorpanel.draw(screen)
-    brush.draw(screen)
+    brushbutton.draw(screen)
     pixelbutton.draw(screen)
+    pygame.draw.rect(screen, (255,255,255), (0,0, 130, 100))
     screen.blit(font.render('Current color: ', False, (0,0,0)), (5,5))
     pygame.draw.rect(screen, color, (20, 25, 40, 20))
-
+    screen.blit(font.render(f'Current mode: {active}', False, (0,0,0)), (5,50))
+    screen.blit(font.render(f'Size: {active.size}', False, (0,0,0)), (5,70))
     
     #if a mouse left click is pressed
     if pygame.mouse.get_pressed() == (1,0,0):
@@ -64,8 +66,8 @@ while True:
                 pygame.draw.circle(screen, colors.get('white'), pos, 30)
         else:
             if pos[0] > 120:
-                if brush.isclicked(pos):
-                    active = pencil
+                if brushbutton.isclicked(pos):
+                    active = brush
                 if pixelbutton.isclicked(pos):
                     active = pixel
             else:

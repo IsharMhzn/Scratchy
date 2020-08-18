@@ -27,29 +27,66 @@ class Cell:
     def __repr__(self):
         return f'Cell of size {self.l} X {self.b} at ({self.x}, {self.y}). Color: {self.color}'
     
-    def draw(self, surface, color):
+    def draw(self, surface, color, width=None):
         self.color = color
-        pygame.draw.rect(surface, color, (self.x*self.l, self.y*self.b, self.l, self.b))
-
+        if not width:
+            pygame.draw.rect(surface, color, (self.x*self.l, self.y*self.b, self.l, self.b))
+        else:
+            pygame.draw.rect(surface, color, (self.x*self.l, self.y*self.b, self.l, self.b), width)
 
 class Grid:
     grid = []
-    def __init__(self, windowsize, cell_size=(10,10)):
-        self.cell_size = cell_size  
+    def __init__(self, windowsize, cell_size=(10,10), size=1):
+        self.cell_size = list(cell_size)  
+        self.size = 1
         self.grid = [[Cell(i,j, *cell_size) for j in range(windowsize[1]//cell_size[1])] for i in range(windowsize[0]//cell_size[0])]
     
     def __str__(self):
-        return f'{len(self.grid)}'
+        return 'Pixel'
+    
+    def gen(self,i,j):
+        while True:
+            yield i+1,j
+            yield i-1,j+1
+            yield i+1,j
     
     def draw(self,screen, color, pos):
-        cell = pos[0]//self.cell_size[0], pos[1]//self.cell_size[1] 
-        self.grid[cell[0]][cell[1]].draw(screen, color)
+        cell = pos[0]//self.cell_size[0], pos[1]//self.cell_size[1]
+        i, count = self.size, self.size * self.size
+        row = True
+        j=0
+        while count > 0:
+            if row:
+                self.grid[cell[0]+i-1][cell[1]].draw(screen, color)
+                i -= 1
+                if i == 0:
+                    row = not row
+                    j += 1
+            else:
+                self.grid[cell[0]+i][cell[1]+j].draw(screen, color)
+                i += 1
+                if i == self.size:
+                    i = 0
+                    j += 1
+            count -= 1          
 
-class Pencil:
+    def increasesize(self):
+        if self.size < 15:
+            self.size += 1
+    
+    def decreasesize(self):
+        if self.size > 2:
+            self.size -= 1
+
+
+class Brush:
     color = 'white'
     def __init__(self, x=0, y=0, size=2):
         self.pos = x, y
         self.size = size
+    
+    def __str__(self):
+        return 'Brush'
     
     def set_pos(self, x, y):
         self.pos = x, y

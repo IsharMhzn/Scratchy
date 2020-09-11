@@ -1,5 +1,5 @@
 # Scratchy
-**Scratchy** is a useful mini version of paint where one can draw anything.
+**Scratchy** is a useful mini version of paint where one can draw anything made using pygame.
 
 ## Working
 There are two modes:
@@ -14,7 +14,8 @@ There are two modes:
 3. Numpad - sign = decrease size
 
 ## Demo
-![Demo](images/demo3.png)
+![Demo1](images/demo.png)
+![Demo2](images/demo3.png)
 
 ### RIP Cheat system (Aug 15 - Aug 17)
 For the time being, a cheat system is utilized. TO change the color or the mode, a cheat should be entered.\
